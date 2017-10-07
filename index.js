@@ -2,6 +2,7 @@ const io = require("socket.io")()
 const mdns = require("mdns")
 const execa = require("execa")
 const path = require("path")
+const {Gpio} = require("onoff")
 
 const port = 8888
 const ad = mdns.createAdvertisement(mdns.tcp("http"), port, {
@@ -32,7 +33,9 @@ tare().then(async val => {
       tareVal = await tare()
       tareTriggered = false
     }
-    io.emit("measure", await measure(tareVal))
+    const measureValue = await measure(tareVal)
+    io.emit("measure", measureValue)
+    console.log(measureValue)
     setTimeout(measureLoop, 200)
   }
   measureLoop()

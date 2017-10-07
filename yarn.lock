@@ -121,6 +121,13 @@ engine.io@~3.1.0:
   optionalDependencies:
     uws "~0.14.4"
 
+epoll@~0.1.22:
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/epoll/-/epoll-0.1.22.tgz#1ab9a637cff11a20970c888b1ca2178b64cf5291"
+  dependencies:
+    bindings "~1.2.1"
+    nan "~2.6.2"
+
 execa@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/execa/-/execa-0.8.0.tgz#d8d76bbc1b55217ed190fd6dd49d3c774ecfc8da"
@@ -201,6 +208,10 @@ nan@~2.3.0:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.3.5.tgz#822a0dc266290ce4cd3a12282ca3e7e364668a08"
 
+nan@~2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
+
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
@@ -218,6 +229,12 @@ object-assign@~4.1.1:
 object-component@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/object-component/-/object-component-0.0.3.tgz#f0c69aa50efc95b866c186f400a33769cb2f1291"
+
+onoff@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/onoff/-/onoff-1.1.7.tgz#91928795bcb5e902fe7551bd7bb2551d9ba76482"
+  dependencies:
+    epoll "~0.1.22"
 
 p-finally@^1.0.0:
   version "1.0.0"
