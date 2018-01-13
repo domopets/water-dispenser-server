@@ -1,13 +1,10 @@
-const io = require("socket.io")()
-const mdns = require("mdns")
 const execa = require("execa")
 const path = require("path")
 const {Gpio} = require("onoff")
+const a = require("awaiting")
 
-const port = 8888
-const ad = mdns.createAdvertisement(mdns.tcp("http"), port, {
-  name: "DOMOPETS_WaterDispenser",
-})
+const valve = new Gpio(18, "out")
+const socket = require("socket.io-client")("https://domopets.herokuapp.com/")
 
 const hx711Path = path.join(__dirname, "..", "hx711py")
 const tare_cmd = path.join(hx711Path, "tare")
@@ -23,6 +20,12 @@ async function measure(tare) {
   return parseInt(stdout)
 }
 
+async function dispenseWater() {
+  valve.writeSync(1)
+  await a.delay(1000)
+  valve.writeSync(0)
+}
+
 let tareVal
 let tareTriggered = false
 tare().then(async val => {
@@ -34,15 +37,18 @@ tare().then(async val => {
       tareTriggered = false
     }
     const measureValue = await measure(tareVal)
-    io.emit("measure", measureValue)
+    socket.emit("dispatch", {
+      action: "measure",
+      payload: measureValue,
+    })
     console.log(measureValue)
     setTimeout(measureLoop, 200)
   }
   measureLoop()
 })
 
-io.on("connection", socket => {
-  socket.on("tare", () => (tareTriggered = true))
+socket.on("connect", () => {
+  socket.emit("type", "WATER")
 })
-
-io.listen(port)
+socket.on("tare", () => (tareTriggered = true))
+socket.on("dispenseWater", dispenseWater)
