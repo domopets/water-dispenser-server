@@ -6,6 +6,7 @@
   "dependencies": {
     "awaiting": "^3.0.0",
     "execa": "^0.8.0",
+    "node-cron": "^1.2.1",
     "onoff": "^1.1.9",
     "socket.io-client": "^2.0.4"
   }

@@ -10,6 +10,8 @@ const hx711Path = path.join(__dirname, "..", "hx711py")
 const tare_cmd = path.join(hx711Path, "tare")
 const measure_cmd = path.join(hx711Path, "measure")
 
+const cron = require("node-cron")
+
 async function tare() {
   const {stdout} = await execa(tare_cmd)
   return parseInt(stdout)
@@ -22,7 +24,7 @@ async function measure(tare) {
 
 async function dispenseWater() {
   valve.writeSync(1)
-  await a.delay(1000)
+  await a.delay(10000)
   valve.writeSync(0)
 }
 
@@ -52,3 +54,24 @@ socket.on("connect", () => {
 })
 socket.on("tare", () => (tareTriggered = true))
 socket.on("dispenseWater", dispenseWater)
+
+let currentTask = null
+socket.on("schedule", ({h, m}) => {
+  console.log(`schedule h: ${h}, m: ${m}`)
+  if (currentTask) {
+    currentTask.destroy()
+  }
+  currentTask = cron.schedule(
+    `${m} ${h - 1} * * *`,
+    () => {
+      dispenseWater()
+      console.log("task running")
+    },
+    true,
+  )
+})
+socket.on("unschedule", () => {
+  console.log("unschedule")
+  if (currentTask) currentTask.destroy()
+  currentTask = null
+})
